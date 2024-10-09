@@ -210,6 +210,11 @@ body, html {
     font-family: "Oswald", sans-serif;
     color: #000;
 }
+.home-container h4 {
+    font-size: 30px;
+    font-family: "Oswald", sans-serif;
+    color: #ffffff;
+}
 
 
 .home-container p {
@@ -301,4 +306,65 @@ body, html {
     background-size: cover; 
     background-position: 13px; 
     box-shadow: 0 0 80px #bb7f5b;
+}
+.recommend-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.recommend-item {
+    width: 25%;
+    margin: 10px;
+    position: relative;
+}
+
+.recommend-item img {
+    width: 80%;
+    object-fit: contain;
+    border-radius: 10px;
+    box-shadow: 0 0 80px #bb7f5b;
+}
+
+.item-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 73%;
+    height: 193px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    padding: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #1e3932;
+}
+
+.recommend-item:hover .item-info {
+    opacity: 1;
+
+}
+.about-container {
+    display: flex;
+    flex-direction: column;
+    background-color : #f2f2f2;
+}
+
+.about-content {
+    text-align: left;
+    margin-top: 100px;
+    margin-left: 75;
+}
+
+.about-content h1 {
+    font-size: 48px;
+    font-family: "Oswald", sans-serif;
+    margin-bottom: 20px;
+}
+
+.about-content p {
+    font-size: 18px;
+    margin-bottom: 20px;
 }
