@@ -68,7 +68,7 @@
         <div class="logo">FABIANERO</div>
         <ul>
             <li><a href="#" onclick="showHome()">Home</a></li>
-            <li><a href="#">About</a></li>
+            <li><a href="#" onclick="showAbout()">About</a></li>
             <li><a href="#">Services</a></li>
             <li><a href="#">Contact</a></li>
         </ul>
@@ -154,14 +154,52 @@
 
 
             <div class="home-recommend-container">
-                <h3>Recommandation</h3>
-
+                <div class="recommend-box">
+                    <h3>Recommandation</h3>
+                    <div class="recommend-row">
+                        <div class="recommend-item">
+                            <img src="https://www.digitalassets.starbucks.eu/sites/starbucks-medialibrary/files/Espresso---Feb-2023.jpeg" alt="Espresso">
+                            <div class="item-info">
+                                <h4>Espresso</h4>
+                                <p>RM 8.00</p>
+                            </div>
+                        </div>
+                        <div class="recommend-item">
+                            <img src="https://www.digitalassets.starbucks.eu/sites/starbucks-medialibrary/files/Cappuccino---Feb-2023.jpeg" alt="Cappuccino">
+                            <div class="item-info">
+                                <h4>Cappuccino</h4>
+                                <p>RM 13.00</p>
+                            </div>
+                        </div>
+                        <div class="recommend-item">
+                            <img src="https://www.digitalassets.starbucks.eu/sites/starbucks-medialibrary/files/Latte-Mug---Feb-2023.jpeg" alt="Caffè Latte">
+                            <div class="item-info">
+                                <h4>Caffè Latte</h4>
+                                <p>RM 14.00</p>
+                            </div>
+                        </div>
+                        <div class="recommend-item">
+                            <img src="https://www.digitalassets.starbucks.eu/sites/starbucks-medialibrary/files/Flat-White---Feb-2023.jpeg" alt="Flat White">
+                            <div class="item-info">
+                                <h4>Flat White</h4>
+                                <p>RM 14.00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>
     </div>
     
-    
+    <div class="about-container" style="display:none;">
+        <div class="about-content">
+            <h1>About Us</h1>
+            <p>Fabianero is a cozy destination that prides itself on serving high-quality coffee <br>and a welcoming atmosphere. Our coffee shop features a selection of pastries and light bites to complement your drink.</p>
+            <p>We are passionate about providing excellent customer service and creating a warm <br>and inviting environment for our customers to relax and enjoy their favorite beverages.</p>
+            <p>Our team is dedicated to sourcing the finest ingredients and using only the best <br>practices to ensure that every cup of coffee is perfect.</p>
+        </div>
+    </div>
     <script src="index_scripts.js"></script>
 </body>
 </html>
