@@ -398,6 +398,14 @@ const items = [
 ];
 isLoggedIn = false;
 
+function showAbout() {
+    document.title = "Fabianero || About Us";
+    document.querySelector('.home-container').style.display = 'none';
+    document.querySelector('.login-container').style.display = 'none';
+    document.querySelector('.register-container').style.display = 'none';
+    document.querySelector('.about-container').style.display = 'flex';
+}
+
 function logout() {
 
     document.querySelector('.home-container').style.display = 'flex';
@@ -414,6 +422,7 @@ function logout() {
 function showHome() {
     document.title = "Fabianero || Home";
     console.log(isLoggedIn)
+    document.querySelector('.about-container').style.display = 'none';
     if (isLoggedIn) {
         document.querySelector('.login-container').style.display = 'none';
         document.querySelector('.register-container').style.display = 'none';
