@@ -356,7 +356,7 @@ const orders = [
         orderDate: '2023-10-01',
         time: '01:30 p.m.',
         status: 'pending',
-        products: getRandomProducts(items, 3),
+        products: 'a',
     },
     {
         id: 2,
@@ -364,7 +364,7 @@ const orders = [
         orderDate: '2023-10-02',
         time: '02:30 p.m.',
         status: 'completed',
-        products: getRandomProducts(items, 2),
+        products: 'a',
     },
     {
         id: 3,
@@ -372,46 +372,13 @@ const orders = [
         orderDate: '2023-10-03',
         time: '03:30 p.m.',
         status: 'pending',
-        products: getRandomProducts(items, 4),
+        products:'a',
     },
-];
-const users = [
-    {
-        userId: 1,
-        username: 'admin',
-        email: 'admin@example.com',
-        role: 'Admin',
-        phoneNumber: '123-456-7890',
-        address: '123 Main St, Anytown, USA'
-    },
-    {
-        userId: 2,
-        username: 'user',
-        email: 'user@example.com',
-        role: 'User ',
-        phoneNumber: '987-654-3210',
-        address: '456 Elm St, Othertown, USA'
-    }
 ];
 
-function getRandomProducts(items, count) {
-    const randomProducts = [];
-    for (let i = 0; i < count; i++) {
-        const randomCategoryIndex = Math.floor(Math.random() * items.length);
-        const randomCategory = items[randomCategoryIndex];
-        const randomSubcategoryIndex = Math.floor(Math.random() * randomCategory.items.length);
-        const randomSubcategory = randomCategory.items[randomSubcategoryIndex];
-        const randomProductIndex = Math.floor(Math.random() * randomSubcategory.items.length);
-        const randomProduct = randomSubcategory.items[randomProductIndex];
-        const product = {
-            name: randomProduct.name,
-            price: randomProduct.price,
-            quantity: Math.floor(Math.random() * 5) + 1,
-        };
-        randomProducts.push(product);
-    }
-    return randomProducts;
-}
+
+
+
 function renderOrderList() {
     // Load orders from local storage
     const orderList = document.getElementById('order-management');
@@ -540,91 +507,115 @@ function deleteMenuItem(event) {
     }
 }
 
-function renderMenuItems() {
-    items.forEach(category => {
-        category.items.forEach(subcategory => {
-            const subcategoryDiv = document.getElementById(subcategory.id);
-            if (!subcategoryDiv) {
-                console.error(`Subcategory div for ${subcategory.id} not found!`);
-                return; 
-            }
 
-            subcategory.items.forEach(product => {
-                const newItem = document.createElement('div');
-                newItem.classList.add('menu-item');               
-                newItem.innerHTML = `
-                    <div>
-                        <div>Product ID: <span class="text">1</span><input type="text" class="input hidden" value="1"></div>
-                        <div>Product Name: <span class="text">${product.name}</span><input type="text" class="input hidden" value="${product.name}"></div>
-                        <div>Price (RM): <span class="text">${product.price.toFixed(2)}</span><input type="text" class="input hidden" value="${product.price.toFixed(2)}"></div>
-                        <div>Description: <span class="text">${product.description}</span><input type="text" class="input hidden" value="${product.description}"></div>
-                        <img src="${product.image}" alt="Image of ${product.name}" width="100" height="100">
-                        <div>
-                            <a href="#" class="btn btn-edit" onclick="editItem(event)">Edit</a>
-                            <a href="#" class="btn btn-save hidden" onclick="saveItem(event)">Save</a>
-                            <a href="#" class="btn btn-delete" onclick="deleteMenuItem(event)">Delete</a>
-                        </div>
-                    </div>
-                `;
-
-                subcategoryDiv.appendChild(newItem);
-            });
-        });
-    });
-}
-
-
-document.addEventListener('DOMContentLoaded', renderMenuItems);
-function renderUserList() {
-    // Load users from local storage
-    const userList = document.getElementById('user-list');
-    userList.innerHTML = '';
-    
-    users.forEach(user => {
-        const userItem = document.createElement('div');
-        userItem.classList.add('user-item');
-        userItem.innerHTML = `
-            <div>
-                <div>User ID: <span class="text">${user.userId}</span><input type="text" class="input hidden" value="${user.userId}"></div>
-                <div>Username: <span class="text">${user.username}</span><input type="text" class="input hidden" value="${user.username}"></div>
-                <div>Role: <span class="text">${user.role}</span><input type="text" class="input hidden" value="${user.role}"></div>
-                <div class="user-details hidden">
-                    <p><strong>Email:</strong> <span class="text">${user.email}</span><input type="text" class="input hidden" value="${user.email}"></p>
-                    <p><strong>Phone Number:</strong> <span class="text">${user.phoneNumber}</span><input type="text" class="input hidden" value="${user.phoneNumber}"></p>
-                    <p><strong>Address:</strong> <span class="text">${user.address}</span><input type="text" class="input hidden" value="${user.address}"></p>
-                </div>
-                <div>
-                    <a href="#" class="btn btn-edit" onclick="editUser(event);editToggleDetail(event);">Edit</a>
-                    <a href="#" class="btn btn-save hidden" onclick="saveUser(event);">Save</a>
-                    <a href="#" class="btn btn-delete" onclick="deleteUser(event)">Delete</a>
-                    <a href="#" class="btn btn-view" onclick="toggleUserDetails(event)">View Details</a>
-                </div>
-            </div>
-        `;
-        
-        userList.appendChild(userItem);
-    });
-}
 function deleteUser(event) {
     if (confirm("Are you sure you want to delete this user?")) {
-        const userItem = event.target.closest('.user-item');
-        const userId = userItem.querySelector('div > div:first-child > span.text').textContent;
-        const userIndex = users.findIndex(user => user.userId === parseInt(userId));
-        if (userIndex !== -1) {
-            users.splice(userIndex, 1);
-        }
-        userItem.remove();
+        const userId = event.target.closest('.user-item').querySelector('div > div:first-child > span.text').textContent;
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'delete_user.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send('user_id=' + userId);
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                event.target.closest('.user-item').remove();
+            } else {
+                alert('Error deleting user.');
+            }
+        };
     }
-}
-document.addEventListener('DOMContentLoaded', renderUserList);
-function addNewUser(event) {
+} 
+
+function addNewUser (event) {
     event.preventDefault();
     const addUserModal = document.getElementById('add-user-modal');
     const modalOverlay = document.getElementById('modal-overlay');
-    
+
     modalOverlay.classList.add('show');
     addUserModal.style.display = 'block';
 }
+
+document.getElementById('add-user-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const userId = document.getElementById('user-id').value;
+    const username = document.getElementById('username').value;
+    const email = document.getElementById('email').value;
+    const role = document.getElementById('role').value;
+    const phoneNumber = document.getElementById('phone-number').value;
+    const address = document.getElementById('address').value;
+
+    const newUser   = document.createElement('div');
+    newUser  .classList.add('user-item');
+    newUser  .innerHTML = `
+        <div>
+            <div>User ID: <span class="text">${userId}</span><input type="text" class="input hidden" value="${userId}"></div>
+            <div>Username: <span class="text">${username}</span><input type="text" class="input hidden" value="${username}"></div>
+            <div>
+            <label for="role">Role:</label>
+                <span class="text"><?php echo ${role}; ?></span>
+                <select class="input hidden" id="role-select">
+                    <option value="user">User </option>
+                    <option value="staff">Staff</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+            <div class="user-details hidden">
+                <p><strong>Email:</strong> <span class="text">${email}</span><input type="text" class="input hidden" value="${email}"></p>
+                <p><strong>Phone Number:</strong> <span class="text">${phoneNumber}</span><input type="text" class="input hidden" value="${phoneNumber}"></p>
+                <p><strong>Address:</strong> <span class="text">${address}</span><input type="text" class="input hidden" value="${address}"></p>
+            </div>
+            <div>
+                <a href="#" class="btn btn-edit" onclick="editUser (event);editToggleDetail(event);">Edit</a>
+                <a href="#" class="btn btn-save hidden" onclick="saveUser (event);">Save</a>
+                <a href="#" class="btn btn-delete" onclick="deleteUser (event)">Delete</a>
+                <a href="#" class="btn btn-view" onclick="toggleUser Details(event)">View Details</a>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('user-list').appendChild(newUser);
+    closeAddUserModal();
+
+    // Send the new user data to the server using Fetch
+    fetch('add_user.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            user_id: userId,
+            username: username,
+            email: email,
+            role: role,
+            phone_number: phoneNumber,
+            address: address
+        })
+    })
+    .then(response => response.text()) // Use response.json() if your PHP script returns JSON
+    .then(data => {
+        console.log('User  added successfully!');
+        console.log(data); // Log the response from the server
+    })
+    .catch(error => {
+        alert('Error adding user.');
+        console.error('Error:', error);
+    });
+});
+
+function closeAddUserModal() {
+    const addUserModal = document.getElementById('add-user-modal');
+    const modalOverlay = document.getElementById('modal-overlay');
+    modalOverlay.classList.remove('show');
+    addUserModal.style.display = 'none';
+}
+
+function closeAddUserModal() {
+    const addUserModal = document.getElementById('add-user-modal');
+    const modalOverlay = document.getElementById('modal-overlay');
+    modalOverlay.classList.remove('show');
+    addUserModal.style.display = 'none';
+}
+
 function editToggleDetail(event){
     event.preventDefault();
     const item = event.target.closest('.user-item');
@@ -634,45 +625,14 @@ function editToggleDetail(event){
         userDetails.classList.remove('hidden');
     }
 }
+
 function closeAddUserModal() {
     const addUserModal = document.getElementById('add-user-modal');
     const modalOverlay = document.getElementById('modal-overlay');
     modalOverlay.classList.remove('show');
     addUserModal.style.display = 'none';
 }
-document.getElementById('add-user-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-    
-    const userId = document.getElementById('user-id').value;
-    const username = document.getElementById('username').value;
-    const email = document.getElementById('email').value;
-    const role = document.getElementById('role').value;
-    const phoneNumber = document.getElementById('phone-number').value;
-    const address = document.getElementById('address').value;
-    
-    const newUser = document.createElement('div');
-    newUser .classList.add('user-item');
-    newUser .classList.add('user-details-container');
-    newUser.innerHTML = `
-        <div>User ID: <span class="text">${userId}</span><input type="text" class="input hidden" value="${userId}"></div>
-        <div>Username: <span class="text">${username}</span><input type="text" class="input hidden" value="${username}"></div>
-        <div>Role: <span class="text">${role}</span><input type="text" class="input hidden" value="${role}"></div>
-        <div class="user-details hidden">
-            <p><strong>Email:</strong> <span class="text">${email}</span><input type="text" class="input hidden" value="${email}"></p>
-            <p><strong>Phone Number:</strong> <span class="text">${phoneNumber}</span><input type="text" class="input hidden" value="${phoneNumber}"></p>
-            <p><strong>Address:</strong> <span class="text">${address}</span><input type="text" class="input hidden" value="${address}"></p>
-        </div>
-        <div>
-            <a href="#" class="btn btn-edit" onclick="editUser(event);editToggleDetail(event);">Edit</a>
-            <a href="#" class="btn btn-save hidden" onclick="saveUser(event);">Save</a>
-            <a href="#" class="btn btn-delete" onclick="deleteUser(event)>Delete</a>
-            <a href="#" class="btn btn-view" onclick="toggleUserDetails(event)">View Details</a>
-        </div>
-    `;
-    
-    document.getElementById('user-list').appendChild(newUser);
-    closeAddUserModal();
-});
+
 function editUser(event) {
 
     const item = event.target.closest('.user-item');
@@ -691,22 +651,7 @@ function editUser(event) {
     event.target.classList.add('hidden');
     item.querySelector('.btn-save').classList.remove('hidden');
 }
-function saveUser(event) {
-    event.preventDefault();
-    const item = event.target.closest('.user-item');
-    const userDetailsContainer = item.querySelector('.user-details-container');
-    const userDetails = item.querySelector('.user-details');
-    const phoneNumber = userDetails.querySelector('p:first-child');
-    const address = userDetails.querySelector('p:nth-child(2)');
-    const email = userDetails.querySelector('p:last-child');
-    
-    phoneNumber.innerHTML = `<strong>Phone Number:</strong> ${phoneNumber.querySelector('input').value}`;
-    address.innerHTML = `<strong>Address:</strong> ${address.querySelector('input').value}`;
-    email.innerHTML = `<strong>Email:</strong> ${email.querySelector('input').value}`;
-    
-    event.target.classList.add('hidden');
-    item.querySelector('.btn-edit').classList.remove('hidden');
-}
+
 function toggleUserDetails(event) {
     event.preventDefault();
     const item = event.target.closest('.user-item');
@@ -723,12 +668,14 @@ function toggleUserDetails(event) {
         event.target.textContent = 'View Details';
     }
 }
+
 function showSection(sectionId) {
     document.getElementById('menu-management').classList.add('hidden');
     document.getElementById('user-management').classList.add('hidden');
     document.getElementById('order-management').classList.add('hidden');
     document.getElementById(sectionId).classList.remove('hidden');
 }
+
 function closeDetails() {
     document.getElementById('modal-overlay').classList.remove('show');
     document.getElementById('order-details-modal').style.display = 'none';
@@ -737,8 +684,14 @@ function closeDetails() {
 function editItem(event) {
     event.preventDefault();
     const item = event.target.closest('.menu-item');
-    item.querySelectorAll('.text').forEach(el => el.classList.add('hidden'));
-    item.querySelectorAll('.input').forEach(el => el.classList.remove('hidden'));
+    item.querySelectorAll('.text').forEach(el => {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = el.textContent;
+        input.className = 'input';
+        el.parentNode.insertBefore(input, el.nextSibling);
+        el.classList.add('hidden');
+    });
     item.querySelector('.btn-edit').classList.add('hidden');
     item.querySelector('.btn-save').classList.remove('hidden');
 }
@@ -746,16 +699,50 @@ function editItem(event) {
 function saveItem(event) {
     event.preventDefault();
     const item = event.target.closest('.menu-item');
-    item.querySelectorAll('.text').forEach(el => {
-        const input = el.nextElementSibling;
-        el.textContent = input.value;
-        el.classList.remove('hidden');
-        input.classList.add('hidden');
-    });
-    item.querySelector('.btn-edit').classList.remove('hidden');
-    item.querySelector('.btn-save').classList.add('hidden');
-}
+    const id = item.querySelector('div > div:nth-child(1) > span.text').textContent;
+    const name = item.querySelector('div > div:nth-child(2) > input.input').value;
+    const price = item.querySelector('div > div:nth-child(3) > input.input').value;
+    const description = item.querySelector('div > div:nth-child(4) > input.input').value;
 
+    // Create a FormData object to send the data
+    const formData = new FormData();
+    formData.append('action', 'update_product');
+    formData.append('id', id);
+    formData.append('name', name);
+    formData.append('price', price);
+    formData.append('description', description);
+
+    // Send the data to the server using fetch
+    fetch('update_products.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            // Update the UI
+            item.querySelector('div > div:nth-child(2) > span.text').textContent = name;
+            item.querySelector('div > div:nth-child(3) > span.text').textContent = price;
+            item.querySelector('div > div:nth-child(4) > span.text').textContent = description;
+
+            // Hide inputs and show text
+            item.querySelectorAll('.text').forEach(el => el.classList.remove('hidden'));
+            item.querySelectorAll('.input').forEach(el => el.classList.add('hidden'));
+
+            // Show edit button and hide save button
+            item.querySelector('.btn-edit').classList.remove('hidden');
+            item.querySelector('.btn-save').classList.add('hidden');
+
+            alert('Product updated successfully');
+        } else {
+            alert('Error updating product: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while updating the product');
+    });
+}
 function editUser(event) {
     event.preventDefault();
     const item = event.target.closest('.user-item');
@@ -763,19 +750,6 @@ function editUser(event) {
     item.querySelectorAll('.input').forEach(el => el.classList.remove('hidden'));
     item.querySelector('.btn-edit').classList.add('hidden');
     item.querySelector('.btn-save').classList.remove('hidden');
-}
-
-function saveUser(event) {
-    event.preventDefault();
-    const item = event.target.closest('.user-item');
-    item.querySelectorAll('.text').forEach(el => {
-        const input = el.nextElementSibling;
-        el.textContent = input.value;
-        el.classList.remove('hidden');
-        input.classList.add('hidden');
-    });
-    item.querySelector('.btn-edit').classList.remove('hidden');
-    item.querySelector('.btn-save').classList.add('hidden');
 }
 
 function showAddProductModal(event) {
@@ -862,4 +836,96 @@ function Admin_LogOut(){
         isLoggedIn = false;
         window.location.href = 'index.php';
     }
+}
+
+function saveUser(event) {
+    event.preventDefault();
+    const item = event.target.closest('.user-item');
+
+    if (!item) {
+        console.error('User item not found.');
+        return;
+    }
+
+    // Select all necessary input fields
+    const userIdInput = item.querySelector('div > div:nth-child(1) > input.input');
+    const usernameInput = item.querySelector('div > div:nth-child(2) > input.input');
+    const emailInput = item.querySelector('.user-details p:nth-child(1) input.input');
+    const phoneNumberInput = item.querySelector('.user-details p:nth-child(2) input.input');
+    const addressInput = item.querySelector('.user-details p:nth-child(3) input.input');
+    const roleSelect = item.querySelector('div > div:nth-child(3) select.input');
+
+    if (!userIdInput || !usernameInput || !emailInput || !phoneNumberInput || !addressInput || !roleSelect) {
+        console.error('One or more input fields are missing.');
+        return;
+    }
+
+    const userId = userIdInput.value;
+    const username = usernameInput.value;
+    const email = emailInput.value;
+    const phoneNumber = phoneNumberInput.value;
+    const address = addressInput.value;
+    const role = roleSelect.value;
+
+    // Update the UI to show the new values
+    item.querySelectorAll('.text').forEach(el => {
+        const input = el.nextElementSibling;
+        if (input && input.classList.contains('input')) {
+            el.textContent = input.value;
+            el.classList.remove('hidden');
+            input.classList.add('hidden');
+        }
+    });
+
+    item.querySelector('.btn-edit').classList.remove('hidden');
+    item.querySelector('.btn-save').classList.add('hidden');
+
+    // Send the updated user data to the server
+    console.log("Sending data to update_user.php:", {
+        user_id: userId,
+        username: username,
+        email: email,
+        phone_number: phoneNumber,
+        address: address,
+        role: role
+    });
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'update_user.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send(`user_id=${userId}&username=${username}&email=${email}&phone_number=${phoneNumber}&address=${address}&role=${role}`);
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            console.log('User  updated successfully!');
+        } else {
+            console.error('Error updating user:', xhr.statusText);
+        }
+    };
+}
+function deletePayment(event) {
+    event.preventDefault();
+    const paymentItem = event.target.closest('.payment-item');
+    const paymentId = paymentItem.querySelector('.text').textContent; // Assuming the first text element is the Payment ID
+
+    if (confirm('Are you sure you want to delete this payment?')) {
+        // Send an AJAX request to delete the payment record in the database
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'delete_payment.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                alert('Payment deleted successfully.');
+                paymentItem.remove();
+            } else {
+                alert('Failed to delete payment.');
+            }
+        };
+        xhr.send('payment_id=' + encodeURIComponent(paymentId));
+    }
+}
+function togglePaymentDetails(event) {
+    event.preventDefault();
+    const paymentItem = event.target.closest('.payment-item');
+    paymentItem.querySelector('.payment-details').classList.toggle('hidden');
 }

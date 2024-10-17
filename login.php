@@ -1,59 +1,64 @@
 <?php
-    session_start();
+session_start();
 
-    $conn = new mysqli('localhost', 'root', '', 'fabianero');  
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
+// Database configuration
+$db_host = 'localhost';
+$db_user = 'root';
+$db_password = '';
+$db_name = 'fabianero';
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $email = $_POST['email'];
-        $password = $_POST['password'];
+// Create a connection to the database
+$conn = new mysqli($db_host, $db_user, $db_password, $db_name);
 
-     
-        $stmt = $conn->prepare("SELECT password FROM users WHERE email = ?");
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    if (empty($email) || empty($password)) {
+        $_SESSION['login_error'] = "Email and password are required.";
+        header("Location: index.php");
+        exit();
+    } else {
+        // Update this query to use the correct column names
+        $sql = "SELECT * FROM users WHERE email = ?";
+        $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $email);
         $stmt->execute();
-        $stmt->store_result();
+        $result = $stmt->get_result();
 
-   
-        if ($stmt->num_rows > 0) {
-       
-            $stmt->bind_result($hashed_password);
-            $stmt->fetch();
-
-  
-            if (password_verify($password, $hashed_password)) {
-                $_SESSION['email'] = $email;
-                $_SESSION['isLoggedIn'] = true;
-                header("Location:index.php");
-                
-                exit();
-
-            } else if ($email == "Admin_Fabianero" && $password == "Fabianero") {
-                $_SESSION['email'] = $email;
-                $_SESSION['isLoggedIn'] = true;
-                header("Location:admin.php");
-                
-                exit();
+        if ($result->num_rows > 0) {
+            $user = $result->fetch_assoc();
+            if (password_verify($password, $user['password'])) {
+                if ($user['email'] == 'admin@example.com') {
+                    header("Location: admin.php");
+                    echo json_encode(['success' => true]);
+                    exit();
+                } else {
+                    $_SESSION['user'] = $email;
+                    header("Location: index.php");
+                    exit();
+                }
             } else {
-                header("Location:index.php");
-                $_SESSION['isLoggedIn'] = false;
-                $_SESSION['error'] = "Invalid password.";
-                
+                $_SESSION['login_error'] = "Invalid password.";
+                header("Location: index.php");
                 exit();
             }
         } else {
-            header("Location:index.php");
-            $_SESSION['isLoggedIn'] = false;
-            $_SESSION['error'] = "No user found with that email.";
-            
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $_SESSION['login_error'] = "Invalid email address.";
+            } else {
+                $_SESSION['login_error'] = "Email or password is incorrect.";
+            }
+            header("Location: index.php");
             exit();
         }
-    
-
-        
     }
-    $stmt->close();
-    $conn->close();
+}
+
+$conn->close();
 ?>
