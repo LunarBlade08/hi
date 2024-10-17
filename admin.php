@@ -29,7 +29,7 @@
         
         <div id="menu-management">
             <h2>Menu Management</h2>
-            <a href="#" class="btn btn-add" onclick="showAddProductModal(event)">Add New Product</a>
+
             <div id="productsContainer">
                 <?php
                 // Connect to the database
@@ -294,66 +294,6 @@
         </div>
     </div>    
 
-    <div class="modal" id="add-product-modal" style="width: 750px; border-radius: 25px;">
-        <div class="modal-header">
-            <h3>Add New Product</h3>
-            <span class="modal-close" onclick="closeAddProductModal()">&times;</span>
-        </div>
-        <div class="modal-body">
-        <form id="add-product-form" enctype="multipart/form-data" method="POST" action="add_product.php">
-            <div style="margin-top: 10;">
-                <label for="product-id">Product ID:</label>
-                <input type="text" id="product-id" name="product_id">
-            </div>
-            <div style="margin-top: 10;">
-                <label for="product-name">Product Name:</label>
-                <input type="text" id="product-name" name="product_name" required>
-            </div>
-            <div style="margin-top: 10;">
-                <label for="product-category-id">Product Category ID:</label>
-                <select id="product-category-id" name="product_category_id">
-                    <option value="coffee">Coffee</option>
-                    <option value="bread">Bread</option>
-                    <option value="cake">Cake</option>
-                </select>
-            </div>
-            <div style="margin-top: 10;">
-                <label for="product-category">Product Category:</label>
-                <select id="product-category" name="product_category" required>
-                    <option value="espresso-beverages">Espresso Beverages</option>
-                    <option value="iced-espresso-beverages">Iced Espresso Beverages</option>
-                    <option value="blonde-roast-&-brewed-coffee">Blonde Roast & Brewed Coffee</option>
-                    <option value="cold-coffee">Cold Coffee</option>
-                    <option value="donut">Donut</option>
-                    <option value="bagels">Bagels</option>
-                    <option value="savory-pastries">Savory Pastries</option>
-                    <option value="scones">Scones</option>
-                    <option value="sweet-pastries">Sweet Pastries</option>
-                    <option value="creamy-cakes">Creamy Cakes</option>
-                    <option value="layered-cakes">Layered Cakes</option>
-                    <option value="citrus-cakes">Citrus Cakes</option>
-                    <option value="brownie">Brownie</option>
-                    <option value="others">--- Others ---</option>
-                </select>
-            </div>
-            <div style="margin-top: 10;">
-                <label for="product-price">Price:</label>
-                <input type="text" id="product-price" name="product_price" required>
-            </div>
-            <div style="margin-top: 10;">
-                <label for="product-description">Description:</label>
-                <input type="text" id="product-description" name="product_description" required>
-            </div>
-            <div style="margin-top: 23; border-top: 1px solid #dddd; padding-top: 15px;">
-                <label for="product-image">Image:</label>
-                <input type="file" id="product-image" name="image" required>
-            </div>
-            <div style="margin-top: 10;">
-                <button type="submit" class="btn btn-save">Save</button>
-            </div>
-        </form>
-        </div>
-    </div>
 
     <script src="admin_scripts.js"></script>
 </body>
