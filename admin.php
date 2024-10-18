@@ -143,7 +143,7 @@
                                 <div>Username: <span class="text"><?php echo $row['email']; ?></span><input type="text" class="input hidden" value="<?php echo $row['email']; ?>"></div>
                                 <div>
                                     <label for="role">Role:</label>
-                                    <span class="text"><?php echo $row['role']; ?></span>
+                                    <span class="text"><?php echo ucfirst(strtolower($row['role'])); ?></span>
                                     <select class="input hidden" id="role-select">
                                         <option value="user">User </option>
                                         <option value="staff">Staff</option>
