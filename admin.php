@@ -275,10 +275,14 @@
                     </div>
                     <div>
                         <label for="role">Role:</label>
-                        <input type="text" id="role" name="role">
+                        <select name="role" id="role">
+                            <option value="admin">Admin</option>
+                            <option value="editor">Staff</option>
+                            <option value="viewer">User</option>
+                        </select>
                     </div>
                     <div>
-                        <label for="role">Phone Number:</label>
+                        <label for="phone-number">Phone Number:</label>
                         <input type="text" id="phone-number" name="role">
                     </div>
                     <div>

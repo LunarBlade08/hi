@@ -552,7 +552,7 @@ document.getElementById('add-user-form').addEventListener('submit', function(eve
             <div>Username: <span class="text">${username}</span><input type="text" class="input hidden" value="${username}"></div>
             <div>
             <label for="role">Role:</label>
-                <span class="text"><?php echo ${role}; ?></span>
+                <span class="text">${role}; ?></span>
                 <select class="input hidden" id="role-select">
                     <option value="user">User </option>
                     <option value="staff">Staff</option>
@@ -673,6 +673,7 @@ function showSection(sectionId) {
     document.getElementById('menu-management').classList.add('hidden');
     document.getElementById('user-management').classList.add('hidden');
     document.getElementById('order-management').classList.add('hidden');
+    document.getElementById('payment-management').classList.add('hidden');
     document.getElementById(sectionId).classList.remove('hidden');
 }
 
